@@ -1,3 +1,6 @@
+from operator import methodcaller
+
+
 medalResults = [
     {
         "sport": "cycling",
@@ -20,7 +23,29 @@ medalResults = [
 def createMedalTable(results):
     # Use the results object above to create a medal table
     # The winner gets 3 points, second place 2 points and third place 1 point
-    return
+    podium = []
+    for value in results:
+        podium.extend(value['podium'])      
+
+    medallist = list(map(methodcaller("split", "."), podium))
+
+    for (value) in medallist:
+        match value[0]:
+            case '1':
+                value[0] = 3
+            case '2':
+                value[0] = 2
+
+            case '3': 
+                value[0] = 1
+
+    scores = {}
+    for value, country in medallist:
+        total = scores.get(country, 0) + value
+        scores[country] = total
+    
+
+    return scores
 
 
 def test_function():
